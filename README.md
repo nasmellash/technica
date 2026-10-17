@@ -11,7 +11,7 @@ Plain HTML, CSS and JavaScript. No frameworks, no build step.
 
 | File | What it does |
 |---|---|
-| `index.html` | The one page every tag opens. `?loc=table-2` decides what it shows. |
+| `index.html` | The one page every tag opens. `?loc=table-1` decides what it shows. |
 | `style.css` | Mobile-first, high-contrast styling. |
 | `app.js` | Page logic: remembers your name, sends notifications, 5-minute cooldown, plays directions. |
 | `locations.js` | **Edit this** to add or rename tables. Used by both the page and the audio script. |
@@ -67,8 +67,6 @@ Then "tap" tags by visiting these URLs:
 
 - http://localhost:3000/?loc=entrance
 - http://localhost:3000/?loc=table-1
-- http://localhost:3000/?loc=table-2
-- http://localhost:3000/?loc=table-3
 - http://localhost:3000/ (an unknown tag shows links to every location)
 
 Things to check:
@@ -103,11 +101,11 @@ Things to check:
 ## 5. Write the NFC tags
 
 With a free app like **NFC Tools** (Android/iOS): Write → Add a record → **URL** →
-for example `https://YOUR-USERNAME.github.io/tabletap/?loc=table-2` → Write → hold the phone to the tag.
+for example `https://YOUR-USERNAME.github.io/tabletap/?loc=table-1` → Write → hold the phone to the tag.
 Leave `index.html` out of the URL: some servers redirect it and drop the `?loc=` part.
 
 ## Adding a table
 
 1. Add a line to `locations.js`, e.g.
-   `{ id: "table-4", name: "Table 4", type: "table", audio: "audio/table-4.mp3" },`
+   `{ id: "table-2", name: "Table 2", type: "table", audio: "audio/table-2.mp3" },`
 2. Label it on `floorplan.png`, run `node generate-audio.js`, then redeploy.

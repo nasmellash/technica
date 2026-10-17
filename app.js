@@ -28,6 +28,7 @@ const currentLocation = LOCATIONS.find((l) => l.id === locId);
 
 // ---------- Grab page elements ----------
 const pageTitle = document.getElementById("page-title");
+const pageSubtitle = document.getElementById("page-subtitle");
 const nameSection = document.getElementById("name-section");
 const nameForm = document.getElementById("name-form");
 const nameInput = document.getElementById("name-input");
@@ -35,6 +36,7 @@ const notifySection = document.getElementById("notify-section");
 const nameDisplay = document.getElementById("name-display");
 const changeNameBtn = document.getElementById("change-name");
 const notifyBtn = document.getElementById("notify-btn");
+const notifyLabel = document.getElementById("notify-label");
 const statusEl = document.getElementById("status");
 const directionsSection = document.getElementById("directions-section");
 const tableList = document.getElementById("table-list");
@@ -95,6 +97,8 @@ notifyBtn.addEventListener("click", async () => {
   }
 
   notifyBtn.disabled = true; // prevent double-taps while sending
+  const originalLabel = notifyLabel.textContent;
+  notifyLabel.textContent = "Sending…";
   showStatus("Sending…");
   try {
     const response = await fetch("https://ntfy.sh/" + NTFY_TOPIC, {
@@ -110,34 +114,76 @@ notifyBtn.addEventListener("click", async () => {
     showStatus("Couldn't send the notification. Check your internet and try again.", "error");
   } finally {
     notifyBtn.disabled = false;
+    notifyLabel.textContent = originalLabel;
   }
 });
 
 // ---------- Entrance: play directions ----------
 const player = new Audio(); // one shared player so two clips never overlap
+let playingButton = null;  // the table button whose directions are playing right now
 
+// Each table becomes a card-style button:  [🍽️]  Table 1 / Play directions  [▶]
 function buildTableList() {
   for (const table of LOCATIONS.filter((l) => l.type === "table")) {
     const li = document.createElement("li");
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "btn btn-primary";
-    button.textContent = `▶ Play directions to ${table.name}`;
-    button.addEventListener("click", () => playDirections(table));
+    button.className = "table-btn";
+    button.setAttribute("aria-label", `Play directions to ${table.name}`);
+    button.innerHTML = `
+      <span class="table-icon" aria-hidden="true">🍽️</span>
+      <span class="table-text">
+        <span class="table-name"></span>
+        <span class="table-action">Play directions</span>
+      </span>
+      <span class="play-icon" aria-hidden="true">▶</span>`;
+    // textContent (not innerHTML) for the name, so any text in locations.js is shown safely.
+    button.querySelector(".table-name").textContent = table.name;
+    button.table = table;
+    button.addEventListener("click", () => playDirections(button));
     li.appendChild(button);
     tableList.appendChild(li);
   }
 }
 
-function playDirections(table) {
+// Put a table button back to its normal "Play directions" look.
+function stopPlaying() {
   player.pause();
+  if (!playingButton) return;
+  playingButton.classList.remove("playing");
+  playingButton.querySelector(".table-action").textContent = "Play directions";
+  playingButton.querySelector(".play-icon").textContent = "▶";
+  playingButton.setAttribute("aria-label", `Play directions to ${playingButton.table.name}`);
+  playingButton = null;
+}
+
+function playDirections(button) {
+  const table = button.table;
+  const wasPlaying = playingButton === button;
+  stopPlaying();
+  if (wasPlaying) {
+    showStatus(`Stopped directions to ${table.name}.`);
+    return;
+  }
+
   player.src = table.audio;
+  playingButton = button;
+  button.classList.add("playing");
+  button.querySelector(".table-action").textContent = "Playing… tap to stop";
+  button.querySelector(".play-icon").textContent = "■";
+  button.setAttribute("aria-label", `Stop directions to ${table.name}`);
   showStatus(`Playing directions to ${table.name}.`);
+
   player.play().catch((error) => {
+    // Ignore this if the user already tapped another table (that cancels this one).
+    if (playingButton !== button) return;
     console.error(error);
+    stopPlaying();
     showStatus(`Sorry, directions to ${table.name} aren't available yet.`, "error");
   });
 }
+
+player.addEventListener("ended", stopPlaying);
 
 // ---------- Unknown / missing location ----------
 function showUnknown() {
@@ -154,17 +200,22 @@ function showUnknown() {
 }
 
 // ---------- Start ----------
+// data-view picks the big emoji at the top of the page (see .hero-icon in style.css).
+document.body.dataset.view = currentLocation ? currentLocation.type : "unknown";
+
 if (!currentLocation) {
   showUnknown();
 } else {
   document.title = `${currentLocation.name} – TableTap`;
   if (currentLocation.type === "entrance") {
     pageTitle.textContent = `Welcome! You're at the ${currentLocation.name}`;
-    notifyBtn.textContent = "Notify friends I've arrived";
+    pageSubtitle.textContent = "Hear directions to any table, or let your friends know you're here.";
+    notifyLabel.textContent = "Notify friends I've arrived";
     directionsSection.hidden = false;
     buildTableList();
   } else {
     pageTitle.textContent = `You're at ${currentLocation.name}`;
+    pageSubtitle.textContent = "Let your friends know where to find you.";
   }
 
   if (loadValue("tabletap-name")) {

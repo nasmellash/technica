@@ -3,22 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#b3261e">
+  <meta name="theme-color" content="#fbf6ee" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1c1714" media="(prefers-color-scheme: dark)">
   <title>TableTap</title>
-  <!-- Friendly rounded font. If it can't load (no internet), a system font is used instead. -->
+  <!-- Modern sans font. If it can't load (no internet), a system font is used instead. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Red-and-white checkered "tablecloth" header -->
+  <!-- Frosted top bar with the logo -->
   <header class="site-header">
-    <p class="logo"><span aria-hidden="true">🍽️</span> TableTap</p>
+    <p class="logo">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12a7 7 0 0 1 14 0M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><path d="M12 14v6"/></svg>
+      </span>
+      <span>Table<span class="logo-accent">Tap</span></span>
+    </p>
   </header>
 
   <main id="main">
-    <!-- Big welcome area. The emoji changes per page type (see style.css). -->
+    <!-- Big welcome area. The icon changes per page type (see style.css). -->
     <section class="hero">
       <div class="hero-icon" aria-hidden="true"></div>
       <h1 id="page-title">Welcome to TableTap</h1>
@@ -43,7 +49,7 @@
         <button type="button" id="change-name" class="btn-link">Change name</button>
       </div>
       <button type="button" id="notify-btn" class="btn btn-primary btn-big">
-        <span aria-hidden="true">🔔</span>
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
         <span id="notify-label">Notify my friends</span>
       </button>
     </section>

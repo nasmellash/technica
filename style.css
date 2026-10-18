@@ -260,7 +260,7 @@ input[type="text"]::placeholder { color: var(--muted); }
 .btn-link:hover { background: var(--accent-soft); }
 
 /* A thick, clear focus outline for keyboard and switch users. */
-button:focus-visible, input:focus-visible, a:focus-visible {
+button:focus-visible, input:focus-visible, a:focus-visible, summary:focus-visible {
   outline: 4px solid var(--focus);
   outline-offset: 3px;
 }
@@ -329,6 +329,27 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 .table-btn.playing .table-action { color: var(--accent-text); font-weight: 600; }
 .table-btn.playing .play-icon { --icon: var(--icon-stop); color: var(--on-accent); background: var(--accent); }
 .table-btn.playing .play-icon::before { animation: pulse 1.1s ease-in-out infinite; }
+
+/* "Read directions" text under each table button */
+.directions-text { margin: 0.5rem 0 0; }
+.directions-text summary {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  color: var(--accent-text);
+  font-weight: 600;
+  cursor: pointer;
+}
+.directions-text summary:hover { background: var(--accent-soft); }
+.directions-text p {
+  margin: 0.5rem 0 0;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  background: var(--surface-2);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  white-space: pre-line; /* keep one step per line, as in the .txt file */
+}
 
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 1; }

@@ -62,7 +62,8 @@ From this folder in Git Bash:
 npx serve .
 ```
 
-(Type `y` if asked to install. Or just double-click `index.html`, which works too.)
+(Type `y` if asked to install. Double-clicking `index.html` also works, but the
+"Read directions" text only shows when the page is served like this.)
 Then "tap" tags by visiting these URLs:
 
 - http://localhost:3000/?loc=entrance
@@ -75,7 +76,8 @@ Things to check:
   5 minutes shows a "notify again in about X minutes" message instead.
 - Testing the cooldown again? In DevTools (F12) → Application → Local Storage,
   delete the `tabletap-last-sent-...` keys.
-- On the entrance page, each "Play directions" button plays its MP3.
+- On the entrance page, each "Play directions" button plays its MP3, and
+  "Read directions" shows the text from `directions/`.
 - Screen reader check: Windows Narrator (Ctrl + Win + Enter) should read the
   status messages aloud.
 

@@ -142,8 +142,32 @@ function buildTableList() {
     button.table = table;
     button.addEventListener("click", () => playDirections(button));
     li.appendChild(button);
+    li.appendChild(buildDirectionsText(table));
     tableList.appendChild(li);
   }
+}
+
+// The same directions as text, for anyone who can't hear the audio (or in a loud hall).
+// generate-audio.js writes them to directions/<id>.txt. Hidden until that file loads.
+function buildDirectionsText(table) {
+  const details = document.createElement("details");
+  details.className = "directions-text";
+  details.hidden = true;
+  details.innerHTML = `<summary>Read directions</summary><p></p>`;
+  details.querySelector("summary").setAttribute("aria-label", `Read directions to ${table.name}`);
+
+  fetch(`directions/${table.id}.txt`)
+    .then((response) => {
+      if (!response.ok) throw new Error("status " + response.status);
+      return response.text();
+    })
+    .then((text) => {
+      details.querySelector("p").textContent = text.trim();
+      details.hidden = false;
+    })
+    .catch((error) => console.error(`No directions text for ${table.id}:`, error));
+
+  return details;
 }
 
 // Put a table button back to its normal "Play directions" look.

@@ -15,17 +15,17 @@ Plain HTML, CSS and JavaScript. No frameworks, no build step.
 |---|---|
 | `index.html` | The one page every tag opens. `?loc=table-1` decides what it shows. |
 | `style.css` | Mobile-first, high-contrast styling. |
-| `app.js` | Page logic: remembers your name, sends notifications, 5-minute cooldown, plays directions. |
-| `locations.js` | **Edit this** to add or rename tables. Used by both the page and the audio script. |
-| `config.js` | Your ntfy topic name and the cooldown length. |
-| `generate-audio.js` | Run once on your laptop: floor plan → Gemini → `directions/*.txt` → ElevenLabs → `audio/*.mp3`. |
+| `js/app.js` | Page logic: remembers your name, sends notifications, 5-minute cooldown, plays directions. |
+| `js/locations.js` | **Edit this** to add or rename tables. Used by both the page and the audio script. |
+| `js/config.js` | Your ntfy topic name and the cooldown length. |
+| `js/generate-audio.js` | Run once on your laptop (from the project folder): floor plan → Gemini → `directions/*.txt` → ElevenLabs → `audio/*.mp3`. |
 | `.env.example` | Template for your API keys. Copy it to `.env`. |
 | `.gitignore` | Keeps `.env` (your secret keys) out of git. |
 
 ## 1. Set up notifications (2 minutes)
 
 1. Each friend installs the **ntfy** app (Android / iOS) or opens https://ntfy.sh/app.
-2. Tap **+ / Subscribe to topic** and enter the topic from `config.js`
+2. Tap **+ / Subscribe to topic** and enter the topic from `js/config.js`
    (`tabletap-4bf7497cc047d1878a`). Leave the server as `ntfy.sh`.
 
 ntfy topics are public: anyone who knows the name can read and send messages.
@@ -36,7 +36,7 @@ The long random name keeps strangers out, but don't send anything private.
 Needs Node.js 21.7 or newer (`node --version`).
 
 1. Save your floor plan as `floorplan.png` in this folder. Label the entrance and
-   tables with the **same names as in `locations.js`** ("Main Entrance", "Table 1"...).
+   tables with the **same names as in `js/locations.js`** ("Main Entrance", "Table 1"...).
 2. Copy the key template and fill it in:
    ```bash
    cp .env.example .env
@@ -46,15 +46,15 @@ Needs Node.js 21.7 or newer (`node --version`).
    - `ELEVENLABS_VOICE_ID`: pick a voice in ElevenLabs and copy its ID
 3. Run:
    ```bash
-   node generate-audio.js
+   node js/generate-audio.js
    ```
 4. **Read every file in `directions/`.** AI can misread a floor plan. Walk the route
    yourself if you can, then fix the text and rebuild only the audio (no Gemini call):
    ```bash
-   node generate-audio.js --from-text
+   node js/generate-audio.js --from-text
    ```
 
-To change the AI model, edit `GEMINI_MODEL` at the top of `generate-audio.js`.
+To change the AI model, edit `GEMINI_MODEL` at the top of `js/generate-audio.js`.
 
 ## 3. Test on your laptop
 
@@ -110,6 +110,6 @@ Leave `index.html` out of the URL: some servers redirect it and drop the `?loc=`
 
 ## Adding a table
 
-1. Add a line to `locations.js`, e.g.
+1. Add a line to `js/locations.js`, e.g.
    `{ id: "table-2", name: "Table 2", type: "table", audio: "audio/table-2.mp3" },`
-2. Label it on `floorplan.png`, run `node generate-audio.js`, then redeploy.
+2. Label it on `floorplan.png`, run `node js/generate-audio.js`, then redeploy.

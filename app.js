@@ -1,4 +1,4 @@
-// TableTap page logic. Uses LOCATIONS (locations.js) and NTFY_TOPIC / COOLDOWN_MS (config.js).
+// Beacon page logic. Uses LOCATIONS (locations.js) and NTFY_TOPIC / COOLDOWN_MS (config.js).
 
 // ---------- Safe localStorage ----------
 // localStorage can throw (private browsing, blocked storage), so wrap it.
@@ -104,7 +104,7 @@ notifyBtn.addEventListener("click", async () => {
     const response = await fetch("https://ntfy.sh/" + NTFY_TOPIC, {
       method: "POST",
       body: notifyMessage(loadValue("tabletap-name")),
-      headers: { Title: "TableTap", Tags: "fork_and_knife" },
+      headers: { Title: "Beacon", Tags: "fork_and_knife" },
     });
     if (!response.ok) throw new Error("ntfy replied with status " + response.status);
     saveValue(cooldownKey, String(Date.now()));
@@ -230,7 +230,7 @@ document.body.dataset.view = currentLocation ? currentLocation.type : "unknown";
 if (!currentLocation) {
   showUnknown();
 } else {
-  document.title = `${currentLocation.name} – TableTap`;
+  document.title = `${currentLocation.name} – Beacon`;
   if (currentLocation.type === "entrance") {
     pageTitle.textContent = `Welcome! You're at the ${currentLocation.name}`;
     pageSubtitle.textContent = "Hear directions to any table, or let your friends know you're here.";

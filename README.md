@@ -1,4 +1,6 @@
-# TableTap 🍽️
+# Beacon 🍽️
+
+*Tap the beacon. Follow the light.*
 
 Tap an NFC tag in the dining hall:
 
